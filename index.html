@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Badminton Score Counter</title>
+  <title>Enhanced Badminton Score Counter</title>
   <style>
-    body{
+    body {
       margin: 0;
       display: flex;
       justify-content: center;
@@ -28,40 +28,30 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 2rem;
+      font-size: 3rem;
       font-weight: bold;
       color: white;
       cursor: pointer;
       user-select: none;
+      transition: background-color 0.3s ease;
     }
 
     .quadrant:hover {
       filter: brightness(1.1);
     }
 
-    .player1-increase {
-      background-color: red;
+    .player1-increase, .player1-decrease {
+      background-color: #ff4136;
     }
 
-    .player1-decrease {
-      background-color: red;
+    .player2-increase, .player2-decrease {
+      background-color: #0074d9;
     }
 
-    .player2-increase {
-      background-color: blue;
-    }
-
-    .player2-decrease {
-      background-color: blue;
-    }
-
-    #reset {
+    #reset, #swap, #game-mode {
       position: absolute;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
       padding: 10px 20px;
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       font-weight: bold;
       border: none;
       cursor: pointer;
@@ -69,62 +59,182 @@
       color: white;
       border-radius: 5px;
       user-select: none;
+      transition: background-color 0.3s ease;
+    }
+
+    #reset:hover, #swap:hover, #game-mode:hover {
+      background-color: #555;
+    }
+
+    #reset {
+      top: 10px;
+      left: 10px;
+    }
+
+    #swap {
+      top: 10px;
+      right: 10px;
+    }
+
+    #game-mode {
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
     #status {
-      position: fixed; /* Ensures the element stays centered even with resizing */
-      top: 50%; /* Centers vertically */
-      left: 50%; /* Centers horizontally */
-      transform: translate(-50%, -50%); /* Adjusts for the element's size */
-      font-size: 1.5rem;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2rem;
       font-weight: bold;
       color: black;
-      background-color: rgba(255, 255, 255, 0.8); /* Add a background for better contrast */
-      padding: 10px 20px; /* Add padding for better appearance */
-      border-radius: 5px; /* Rounded corners for aesthetics */
-      z-index: 1000; /* Ensure it appears above other elements */
-      text-align: center; /* Center the text */
-      max-width: 90%; /* Ensure it fits well on smaller screens */
-      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for prominence */
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 15px 30px;
+      border-radius: 10px;
+      z-index: 1000;
+      text-align: center;
+      max-width: 90%;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
     }
 
-    /* Styling for score positioning */
-    #player1-score, #player2-score {
-      font-size: 3rem;
+    .score {
+      font-size: 5rem;
       font-weight: bold;
       color: white;
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     }
 
     #player1-score {
-      left: 24%;
+      left: 25%;
     }
 
     #player2-score {
-      right: 24%;
+      right: 25%;
+    }
+
+    .player-name {
+      position: absolute;
+      top: 20px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: white;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    #player1-name {
+      left: 25%;
+    }
+
+    #player2-name {
+      right: 25%;
+    }
+
+    .name-input {
+      position: absolute;
+      top: 60px;
+      font-size: 1rem;
+      padding: 5px;
+      border-radius: 5px;
+      border: none;
+      background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    #player1-name-input {
+      left: 25%;
+      transform: translateX(-50%);
+    }
+
+    #player2-name-input {
+      right: 25%;
+      transform: translateX(50%);
+    }
+
+    #match-history {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 10px;
+      border-radius: 5px;
+      max-width: 300px;
+      max-height: 150px;
+      overflow-y: auto;
+      text-align: center;
+    }
+
+    #match-history h3 {
+      margin-top: 0;
+      color: #333;
+    }
+
+    #match-history ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    #match-history li {
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    @media (max-width: 768px) {
+      .quadrant {
+        font-size: 2rem;
+      }
+      .score {
+        font-size: 3rem;
+      }
+      .player-name {
+        font-size: 1rem;
+      }
+      .name-input {
+        font-size: 0.8rem;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div id="player1-increase" class="quadrant player1-increase">+ </div>
-    <div id="player2-increase" class="quadrant player2-increase">+ </div>
-    <div id="player1-decrease" class="quadrant player1-decrease">- </div>
-    <div id="player2-decrease" class="quadrant player2-decrease">- </div>
+    <div id="player1-increase" class="quadrant player1-increase">+</div>
+    <div id="player2-increase" class="quadrant player2-increase">+</div>
+    <div id="player1-decrease" class="quadrant player1-decrease">-</div>
+    <div id="player2-decrease" class="quadrant player2-decrease">-</div>
   </div>
 
-  <div id="player1-score">0</div>
-  <div id="player2-score">0</div>
+  <input type="text" id="player1-name-input" class="name-input" placeholder="Player 1 Name">
+  <input type="text" id="player2-name-input" class="name-input" placeholder="Player 2 Name">
+
+  <div id="player1-name" class="player-name">Player 1</div>
+  <div id="player2-name" class="player-name">Player 2</div>
+  <div id="player1-score" class="score">0</div>
+  <div id="player2-score" class="score">0</div>
   
   <button id="reset">Reset</button>
+  <button id="swap">Swap Sides</button>
+  <select id="game-mode">
+    <option value="21">21 Points</option>
+    <option value="11">11 Points</option>
+  </select>
   <div id="status"></div>
+
+  <div id="match-history">
+    <h3>Match History</h3>
+    <ul id="history-list"></ul>
+  </div>
 
 <script>
 let score1 = 0;
 let score2 = 0;
-const maxPoints = 21;
+let maxPoints = 21;
+let serving = 1;
+let matchHistory = [];
 
 const player1ScoreDisplay = document.getElementById('player1-score');
 const player2ScoreDisplay = document.getElementById('player2-score');
@@ -133,29 +243,38 @@ const player1Decrease = document.getElementById('player1-decrease');
 const player2Increase = document.getElementById('player2-increase');
 const player2Decrease = document.getElementById('player2-decrease');
 const resetButton = document.getElementById('reset');
-const statusDisplay = document.getElementById('status'); // Fixed missing definition
+const swapButton = document.getElementById('swap');
+const statusDisplay = document.getElementById('status');
+const player1NameInput = document.getElementById('player1-name-input');
+const player2NameInput = document.getElementById('player2-name-input');
+const player1NameDisplay = document.getElementById('player1-name');
+const player2NameDisplay = document.getElementById('player2-name');
+const gameModeSelect = document.getElementById('game-mode');
+const historyList = document.getElementById('history-list');
 
 const updateStatus = () => {
-  if (score1 >= 20 && score2 >= 20) {
+  if (score1 >= maxPoints - 1 && score2 >= maxPoints - 1) {
     if (Math.abs(score1 - score2) === 1) {
-      statusDisplay.textContent = `Advantage ${score1 > score2 ? "Player 1" : "Player 2"}`;
+      statusDisplay.textContent = `Advantage ${score1 > score2 ? player1NameDisplay.textContent : player2NameDisplay.textContent}`;
     } else if (score1 === score2) {
       statusDisplay.textContent = "Deuce";
     } else {
       statusDisplay.textContent = '';
     }
   } else {
-    statusDisplay.textContent = '';
+    statusDisplay.textContent = `Serving: ${serving === 1 ? player1NameDisplay.textContent : player2NameDisplay.textContent}`;
   }
 };
 
 const checkWinner = () => {
   if (score1 >= maxPoints && score1 - score2 >= 2) {
-    statusDisplay.innerHTML = `Player 1 wins!`;
+    statusDisplay.innerHTML = `${player1NameDisplay.textContent} wins!`;
+    addToMatchHistory();
     disableClicks();
     autoReset();
   } else if (score2 >= maxPoints && score2 - score1 >= 2) {
-    statusDisplay.innerHTML = `Player 2 wins!`;
+    statusDisplay.innerHTML = `${player2NameDisplay.textContent} wins!`;
+    addToMatchHistory();
     disableClicks();
     autoReset();
   }
@@ -170,49 +289,116 @@ const disableClicks = () => {
 const resetScores = () => {
   score1 = 0;
   score2 = 0;
-  player1ScoreDisplay.textContent = score1; // Update display
-  player2ScoreDisplay.textContent = score2; // Update display
+  serving = 1;
+  player1ScoreDisplay.textContent = score1;
+  player2ScoreDisplay.textContent = score2;
   updateStatus();
-  document.getElementById('status').textContent = '';
   document.querySelectorAll('.quadrant').forEach((el) => {
     el.style.pointerEvents = 'auto';
   });
 };
 
 const autoReset = () => {
-  setTimeout(resetScores, 5000); // Automatically reset after 5 seconds
+  setTimeout(resetScores, 5000);
+};
+
+const updateServing = () => {
+  const totalScore = score1 + score2;
+  if (totalScore < maxPoints * 2 - 2) {
+    serving = Math.floor(totalScore / 2) % 2 + 1;
+  } else {
+    serving = totalScore % 2 + 1;
+  }
+};
+
+const swapSides = () => {
+  [score1, score2] = [score2, score1];
+  player1ScoreDisplay.textContent = score1;
+  player2ScoreDisplay.textContent = score2;
+  [player1NameDisplay.textContent, player2NameDisplay.textContent] = [player2NameDisplay.textContent, player1NameDisplay.textContent];
+  [player1NameInput.value, player2NameInput.value] = [player2NameInput.value, player1NameInput.value];
+  updateStatus();
+};
+
+const addToMatchHistory = () => {
+  const result = `${player1NameDisplay.textContent} ${score1} - ${score2} ${player2NameDisplay.textContent}`;
+  matchHistory.unshift(result);
+  if (matchHistory.length > 5) matchHistory.pop();
+  updateMatchHistoryDisplay();
+};
+
+const updateMatchHistoryDisplay = () => {
+  historyList.innerHTML = '';
+  matchHistory.forEach(match => {
+    const li = document.createElement('li');
+    li.textContent = match;
+    historyList.appendChild(li);
+  });
 };
 
 player1Increase.addEventListener('click', () => {
   score1++;
-  player1ScoreDisplay.textContent = score1; // Update display
+  player1ScoreDisplay.textContent = score1;
+  updateServing();
   updateStatus();
   checkWinner();
 });
 
 player1Decrease.addEventListener('click', () => {
-  if (score1 > 0) score1--;
-  player1ScoreDisplay.textContent = score1; // Update display
-  updateStatus();
+  if (score1 > 0) {
+    score1--;
+    player1ScoreDisplay.textContent = score1;
+    updateServing();
+    updateStatus();
+  }
 });
 
 player2Increase.addEventListener('click', () => {
   score2++;
-  player2ScoreDisplay.textContent = score2; // Update display
+  player2ScoreDisplay.textContent = score2;
+  updateServing();
   updateStatus();
   checkWinner();
 });
 
 player2Decrease.addEventListener('click', () => {
-  if (score2 > 0) score2--;
-  player2ScoreDisplay.textContent = score2; // Update display
-  updateStatus();
+  if (score2 > 0) {
+    score2--;
+    player2ScoreDisplay.textContent = score2;
+    updateServing();
+    updateStatus();
+  }
 });
 
 resetButton.addEventListener('click', resetScores);
+swapButton.addEventListener('click', swapSides);
 
-updateStatus(); // Initialize the status display
+player1NameInput.addEventListener('input', () => {
+  player1NameDisplay.textContent = player1NameInput.value || 'Player 1';
+});
 
+player2NameInput.addEventListener('input', () => {
+  player2NameDisplay.textContent = player2NameInput.value || 'Player 2';
+});
+
+gameModeSelect.addEventListener('change', () => {
+  maxPoints = parseInt(gameModeSelect.value);
+  resetScores();
+});
+
+updateStatus();
+
+// Keyboard controls
+document.addEventListener('keydown', (e) => {
+  switch(e.key) {
+    case 'q': player1Increase.click(); break;
+    case 'a': player1Decrease.click(); break;
+    case 'p': player2Increase.click(); break;
+    case 'l': player2Decrease.click(); break;
+    case 'r': resetButton.click(); break;
+    case 's': swapButton.click(); break;
+  }
+});
 </script>
 </body>
 </html>
