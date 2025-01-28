@@ -1,0 +1,6 @@
+{
+  "appId": "com.badmintonscore.app",
+  "appName": "Badminton Score Counter",
+  "webDir": "www",
+  "bundledWebRuntime": false
+}

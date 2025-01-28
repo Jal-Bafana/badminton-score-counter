@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Badminton Score Counter</string>
+    <string name="title_activity_main">Badminton Score Counter</string>
+    <string name="package_name">com.badmintonscore.app</string>
+    <string name="custom_url_scheme">com.badmintonscore.app</string>
+</resources>
