@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enhanced Badminton Score Counter</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#333333">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="apple-touch-icon" href="icon-192x192.png">
+<body>
+  <div class="container">
+    <div id="player1-increase" class="quadrant player1-increase">+</div>
+    <div id="player2-increase" class="quadrant player2-increase">+</div>
+    <div id="player1-decrease" class="quadrant player1-decrease">-</div>
+    <div id="player2-decrease" class="quadrant player2-decrease">-</div>
+  </div>
+
+  <input type="text" id="player1-name-input" class="name-input" placeholder="Player 1 Name">
+  <input type="text" id="player2-name-input" class="name-input" placeholder="Player 2 Name">
+
+  <div id="player1-name" class="player-name">Player 1</div>
+  <div id="player2-name" class="player-name">Player 2</div>
+  <div id="player1-score" class="score">0</div>
+  <div id="player2-score" class="score">0</div>
+  
+  <button id="reset">Reset</button>
+  <button id="swap">Swap Sides</button>
+  <select id="game-mode">
+    <option value="21">21 Points</option>
+    <option value="11">11 Points</option>
+  </select>
+  <div id="status"></div>
+
+  <div id="match-history">
+    <h3>Match History</h3>
+    <ul id="history-list"></ul>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

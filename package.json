@@ -1,0 +1,19 @@
+{
+  "name": "badminton-score-counter",
+  "version": "1.0.0",
+  "description": "Badminton Score Counter App",
+  "main": "script.js",
+  "scripts": {
+    "build": "cp -r www/* dist/",
+    "sync": "npx cap sync"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.0.1",
+    "@capacitor/cli": "^7.0.1",
+    "@capacitor/core": "^7.0.1",
+    "@capacitor/ios": "^7.0.1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
